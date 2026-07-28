@@ -1,6 +1,19 @@
+# Use-case:
+The luau language treats only configurations provided via Roblox's fflags as canon, but has not provided a way to allow users/embedders of the luau binary to run it as such; without any `--fflags=`, the luau binary sets every known fflag to true.
+
+This mismatch has caused embedders to anticipate features that were never enabled in Roblox's fflags, and contributors providing faulty lists of open issues they tested via `luau-analyze`.
+
+The lack of documentation in stating or confirming this standard was found to be resolvable upon looking in [luau-lang's playground repo](https://github.com/luau-lang/playground/blob/b0afa61dcf78a12c18d7ab67c44d4a6482aefdec/src/lib/luau/wasm.ts#L25).
+
 # How to Use
-You will need to give the shell script execution permissions only once by doing `chmod +x ./studioinator.sh`.
+Ensure you have the following dependencies:
+- `curl` for pulling live roblox fflags from the canonical URL
+- `jq` for parsing/filtering the json results from prior `curl`
+- `luau` for running the luau binary itself.
+
+Execution permissions are required; if permission is denied, run `chmod +x ./studioinator.sh`.
 
 Then, run `./studioinator.sh`, passing arguments the same way you would into the luau binary.
 
-This makes the luau binary a product.
+## Contributions
+Contributions are welcome to improve the utility of this tool. Some current examples would be improving how fflags can be provided, and specifying which luau binary to run, such as `luau-analyze`.
