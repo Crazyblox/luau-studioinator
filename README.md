@@ -17,7 +17,10 @@ Execution permissions are required; if permission is denied, run `chmod +x ./stu
 
 Then, run `./studioinator.sh`, passing arguments the same way you would into the luau binary.
 
-`./studioinator.sh` runs `luau` by default; by specifying different luau-named binaries in the first argument, the script will execute that binary instead, continuing to transparently provide the rest of your args.
+## Examples:
+- Run `luau` binary with given script: `./studioinator.sh example.luau`
+- Run `luau` binary explicitly with given script: `./studioinator.sh luau example.luau`
+- Run `luau-analyze` binary with given script: `./studioinator.sh luau-analyze example.luau`
 
 ## Contributions
 Contributions are welcome to improve the accuracy of this tool's functionality, as well as its utility.
