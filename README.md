@@ -20,4 +20,4 @@ Then, run `./studioinator.sh`, passing arguments the same way you would into the
 `./studioinator.sh` runs `luau` by default; by specifying different luau-named binaries in the first argument, the script will execute that binary instead, continuing to transparently provide the rest of your args.
 
 ## Contributions
-Contributions are welcome to improve the utility of this tool.
+Contributions are welcome to improve the accuracy of this tool's functionality, as well as its utility.
