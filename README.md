@@ -1,5 +1,5 @@
 # Use-case:
-The luau language treats only configurations provided via Roblox's fflags as canon, but has not provided a way to allow users/embedders of the luau binary to run it as such; without any `--fflags=`, the luau binary sets its own default list of fflags to true.
+The luau language treats only configurations provided via Roblox's fflags as canon, but has not provided a way to allow users/embedders of the luau binary to run it as such by default or with a preset; without any `--fflags=`, the luau binary sets its own default list of fflags to true.
 
 This mismatch has caused confusion with luau's users enough times, including users communicating with the luau team, warranting the decision to create this small tool.
 
