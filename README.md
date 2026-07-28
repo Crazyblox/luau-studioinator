@@ -11,9 +11,7 @@ The lack of documentation in stating or confirming this standard was found to be
 Ensure you have the following dependencies:
 - `curl` for pulling live roblox fflags from the canonical URL
 - `jq` for parsing/filtering the json results from prior `curl`
-- `luau` for running the luau binary itself.
-- `command` for validating a specified binary with 'luau' in the name.
-- `exec` for dropping into the given luau binary.
+- `luau` or relevant luau binaries for studioinator to exec.
 
 Execution permissions are required; if permission is denied, run `chmod +x ./studioinator.sh`.
 
