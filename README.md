@@ -12,6 +12,7 @@ Ensure you have the following dependencies:
 - `curl` for pulling live roblox fflags from the canonical URL
 - `jq` for parsing/filtering the json results from prior `curl`
 - `luau` or relevant luau binaries for studioinator to exec.
+- `mktemp`, `grep`, `tr` 
 
 Execution permissions are required; if permission is denied, run `chmod +x ./studioinator.sh`.
 
