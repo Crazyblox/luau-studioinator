@@ -27,12 +27,9 @@ if [[ "$1" == *luau* ]] && command -v "$1" >/dev/null 2>&1; then
     LUAU_BIN="$1"
     shift
 fi
-FFLAG_URL="https://clientsettingscdn.roblox.com/v1/settings/application?applicationName=PCStudioApp"
-FFLAG_PREFIXES='["FFlagLuau","FIntLuau","DFFlagLuau","DFIntLuau"]'
-
-DEPENDENCIES="mktemp grep tr jq curl $LUAU_BIN"
 
 # Dependency check
+DEPENDENCIES="mktemp grep tr jq curl $LUAU_BIN"
 for arg in $DEPENDENCIES; do
     if ! command -v $arg >/dev/null 2>&1; then
         echo "Error: '$arg' not found in PATH" >&2
@@ -42,6 +39,8 @@ done
 
 # Based on luau playground:
 # https://github.com/luau-lang/playground/blob/b0afa61dcf78a12c18d7ab67c44d4a6482aefdec/src/lib/luau/wasm.ts#L25
+FFLAG_URL="https://clientsettingscdn.roblox.com/v1/settings/application?applicationName=PCStudioApp"
+FFLAG_PREFIXES='["FFlagLuau","FIntLuau","DFFlagLuau","DFIntLuau"]'
 FFLAG_ARGS=$(curl -sSL "$FFLAG_URL"| jq -j --argjson prefixes "$FFLAG_PREFIXES" '
     def emit($key; $val):
         # If val is a string, keep it unquoted (e.g., abc)
@@ -60,7 +59,7 @@ FFLAG_ARGS=$(curl -sSL "$FFLAG_URL"| jq -j --argjson prefixes "$FFLAG_PREFIXES" 
     end
 ')
 
-# Split args into lines based on comma
+# Split args into lines via ','
 FFLAG_ARG_LINES=$(printf '%s\n' "$FFLAG_ARGS" | tr ',' '\n')
 
 # Perform test to fetch luau fflag warnings
@@ -73,7 +72,7 @@ TEST_WARNINGS=$(
         2>&1 >/dev/null || true
 )
 
-# [WORKS] Place incompatible fflag names into list
+# Place incompatible fflag names into list
 FFLAG_INCOMPATIBLE=$(
     printf '%s\n' "$TEST_WARNINGS" |
     grep -oE '(Luau)[A-Za-z0-9_]+' |
@@ -85,12 +84,12 @@ FFLAG_INCOMPATIBLE=$(
 TEMP_INCOMPATIBLE=$(mktemp)
 trap 'rm -f "$TEMP_INCOMPATIBLE"' EXIT
 printf '%s\n' "$FFLAG_INCOMPATIBLE" > "$TEMP_INCOMPATIBLE"
-
 FFLAG_FILTERED=$(
     printf '%s\n' "$FFLAG_ARG_LINES" |
     grep -Fv -f "$TEMP_INCOMPATIBLE" || true
 )
 
+# Displays what relevant fflags have been applied from roblox's live fflags.
 if [[ "$VERBOSE" == true ]]; then
 #   printf "TEST_WARNINGS lines: "
 #   printf '%s\n' "$TEST_WARNINGS" | wc -l
@@ -107,6 +106,7 @@ if [[ "$VERBOSE" == true ]]; then
     echo "$FFLAG_FILTERED"
 fi
 
+# Final modification to make usable when executing the binary
 FFLAG_FILTERED=$(printf '%s\n' "$FFLAG_FILTERED" | tr '\n' ',')
 
 # Run luau binary, disable all unspecified fflags, apply FFLAG_FILTERED
