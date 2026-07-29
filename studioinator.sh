@@ -30,7 +30,7 @@ fi
 FFLAG_URL="https://clientsettingscdn.roblox.com/v1/settings/application?applicationName=PCStudioApp"
 FFLAG_PREFIXES='["FFlagLuau","FIntLuau","DFFlagLuau","DFIntLuau"]'
 
-DEPENDENCIES="jq curl $LUAU_BIN"
+DEPENDENCIES="mktemp grep tr jq curl $LUAU_BIN"
 
 # Dependency check
 for arg in $DEPENDENCIES; do
@@ -55,6 +55,7 @@ FFLAG_ARGS=$(curl -sSL "$FFLAG_URL"| jq -j --argjson prefixes "$FFLAG_PREFIXES" 
         | select(.key as $k
             | any($prefixes[]; . as $prefix | $k | startswith($prefix))
         )
+#       | emit(.key; .value)
         | emit((.key | sub("^(D?FFlag|D?FInt)"; "")); .value)
     end
 ')
@@ -72,7 +73,7 @@ TEST_WARNINGS=$(
         2>&1 >/dev/null || true
 )
 
-# Place incompatible fflag names into list
+# [WORKS] Place incompatible fflag names into list
 FFLAG_INCOMPATIBLE=$(
     printf '%s\n' "$TEST_WARNINGS" |
     grep -oE '(Luau)[A-Za-z0-9_]+' |
@@ -106,7 +107,6 @@ if [[ "$VERBOSE" == true ]]; then
     echo "$FFLAG_FILTERED"
 fi
 
-# Makes filtered flags usable with '--fflags='
 FFLAG_FILTERED=$(printf '%s\n' "$FFLAG_FILTERED" | tr '\n' ',')
 
 # Run luau binary, disable all unspecified fflags, apply FFLAG_FILTERED
